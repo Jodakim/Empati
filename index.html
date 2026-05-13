@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmpatiTrening</title>
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;600;700&family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ios-blue: #007AFF;
+  --ios-blue-light: #3395FF;
+  --ios-bg: #F2F2F7;
+  --ios-surface: #FFFFFF;
+  --ios-border: #C6C6C8;
+  --ios-text: #000000;
+  --ios-secondary: #8E8E93;
+  --ios-green: #34C759;
+  --ios-red: #FF3B30;
+  --ios-yellow: #FF9500;
+  --ios-header: #F9F9F9;
+  --r: 18px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+
+body {
+  background: var(--ios-bg);
+  font-family: -apple-system, 'SF Pro Display', 'DM Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--ios-text);
+}
+
+/* ── SCREENS ── */
+.screen { display: none; width: 100%; max-width: 430px; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── BUTTONS ── */
+.btn {
+  display: block; width: 100%; padding: 16px;
+  border-radius: 14px; border: none;
+  font-family: -apple-system, 'DM Sans', sans-serif;
+  font-size: 1rem; font-weight: 600;
+  cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.btn:active { transform: scale(0.97); }
+.btn-blue { background: var(--ios-blue); color: white; }
+.btn-blue:hover { background: var(--ios-blue-light); }
+.btn-gray { background: white; color: var(--ios-blue); border: 1.5px solid var(--ios-border); margin-top: 10px; }
+
+/* ── HOME ── */
+#screen-home {
+  background: var(--ios-bg);
+  padding: 0;
+}
+.home-hero {
+  background: white;
+  padding: 56px 28px 32px;
+  text-align: center;
+  border-bottom: 1px solid var(--ios-border);
+}
+.home-emoji { font-size: 64px; display: block; margin-bottom: 16px; animation: pulse 2.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+.home-title { font-size: 2rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 8px; }
+.home-sub { color: var(--ios-secondary); font-size: 0.95rem; line-height: 1.6; }
+
+.home-stats {
+  display: flex; gap: 0;
+  background: white; margin: 16px 16px 0;
+  border-radius: var(--r); overflow: hidden;
+  border: 1px solid var(--ios-border);
+}
+.hstat { flex: 1; padding: 16px 12px; text-align: center; }
+.hstat:not(:last-child) { border-right: 1px solid var(--ios-border); }
+.hstat-val { font-size: 1.8rem; font-weight: 700; display: block; color: var(--ios-blue); }
+.hstat-lbl { font-size: 0.7rem; color: var(--ios-secondary); margin-top: 2px; font-weight: 500; }
+
+.home-btns { padding: 16px 16px 32px; }
+
+.mode-cards { display: flex; flex-direction: column; gap: 10px; margin: 0 16px 16px; }
+.mode-card {
+  background: white; border-radius: var(--r); padding: 16px 18px;
+  border: 1px solid var(--ios-border); cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; gap: 14px;
+}
+.mode-card:active { transform: scale(0.98); background: var(--ios-bg); }
+.mode-icon { font-size: 2rem; flex-shrink: 0; }
+.mode-info .mode-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 3px; }
+.mode-info .mode-desc { font-size: 0.8rem; color: var(--ios-secondary); line-height: 1.4; }
+.mode-arrow { color: var(--ios-border); font-size: 1rem; margin-left: auto; }
+
+/* ── LEVELS ── */
+#screen-levels { background: var(--ios-bg); }
+.nav-bar {
+  background: rgba(249,249,249,0.94);
+  backdrop-filter: blur(20px);
+  padding: 52px 20px 12px;
+  border-bottom: 0.5px solid var(--ios-border);
+  display: flex; align-items: center; gap: 8px;
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-back {
+  background: none; border: none; color: var(--ios-blue);
+  font-size: 1.05rem; cursor: pointer; display: flex; align-items: center; gap: 4px;
+  font-family: -apple-system, 'DM Sans', sans-serif; font-weight: 400;
+}
+.nav-title { font-weight: 600; font-size: 1rem; margin: 0 auto; }
+.nav-spacer { width: 60px; }
+
+.levels-list { padding: 20px 16px; display: flex; flex-direction: column; gap: 10px; }
+.level-row {
+  background: white; border-radius: var(--r); padding: 16px 18px;
+  border: 1px solid var(--ios-border); cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; gap: 14px;
+}
+.level-row:active { background: var(--ios-bg); transform: scale(0.99); }
+.level-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.level-text .lname { font-weight: 600; font-size: 0.95rem; }
+.level-text .ldesc { font-size: 0.8rem; color: var(--ios-secondary); margin-top: 2px; }
+.level-badge { margin-left: auto; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+.lb-easy   { background: rgba(52,199,89,0.12);  color: #1a7a35; }
+.lb-medium { background: rgba(255,149,0,0.12);  color: #a05e00; }
+.lb-hard   { background: rgba(255,59,48,0.12);  color: #c0392b; }
+.lb-expert { background: rgba(0,122,255,0.12);  color: #0040a0; }
+
+/* ── IMESSAGE QUIZ ── */
+#screen-quiz {
+  background: white;
+  display: flex; flex-direction: column;
+}
+
+/* iMessage top bar */
+.imsg-header {
+  background: rgba(249,249,249,0.94);
+  backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid var(--ios-border);
+  padding: 52px 16px 10px;
+  display: flex; align-items: center; gap: 12px;
+  position: sticky; top: 0; z-index: 100;
+  flex-shrink: 0;
+}
+.imsg-back {
+  background: none; border: none; color: var(--ios-blue);
+  font-size: 1.2rem; cursor: pointer; font-weight: 300; line-height: 1;
+  padding: 4px; display: flex; align-items: center;
+}
+.imsg-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; color: white; font-weight: 600; flex-shrink: 0;
+}
+.imsg-contact { flex: 1; }
+.imsg-contact-name { font-weight: 600; font-size: 0.95rem; }
+.imsg-contact-sub { font-size: 0.72rem; color: var(--ios-secondary); }
+.imsg-progress-wrap { display: flex; align-items: center; gap: 8px; }
+.imsg-qnum { font-size: 0.75rem; color: var(--ios-secondary); font-weight: 600; }
+
+/* Emotion tags */
+.emotion-tags {
+  padding: 10px 16px 4px;
+  display: flex; flex-wrap: wrap; gap: 6px;
+  flex-shrink: 0;
+}
+.emotion-tag {
+  font-size: 0.72rem; font-weight: 600; padding: 4px 10px;
+  border-radius: 99px; border: 1.5px solid transparent;
+}
+
+/* Chat messages area */
+.chat-area {
+  flex: 1; overflow-y: auto; padding: 12px 16px 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+/* iMessage bubble */
+.msg-row { display: flex; align-items: flex-end; gap: 8px; }
+.msg-row.incoming { justify-content: flex-start; }
+.msg-row.outgoing { justify-content: flex-end; }
+.msg-avatar-sm {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 600; color: white; flex-shrink: 0;
+  align-self: flex-end;
+}
+.bubble-msg {
+  max-width: 72%; padding: 10px 14px;
+  border-radius: 18px; font-size: 0.95rem; line-height: 1.5;
+  animation: bubbleIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes bubbleIn {
+  from { opacity:0; transform:scale(0.8) translateY(8px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
+}
+.bubble-msg.incoming {
+  background: #E9E9EB; color: #000;
+  border-bottom-left-radius: 4px;
+}
+.bubble-msg.outgoing {
+  background: var(--ios-blue); color: white;
+  border-bottom-right-radius: 4px;
+}
+.bubble-msg.outgoing.good { background: var(--ios-green); }
+.bubble-msg.outgoing.bad  { background: #E9E9EB; color: #000; }
+.msg-time { font-size: 0.68rem; color: var(--ios-secondary); text-align: center; margin: 8px 0 4px; }
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex; gap: 4px; padding: 12px 14px;
+  background: #E9E9EB; border-radius: 18px; border-bottom-left-radius: 4px;
+  width: fit-content; margin-left: 36px;
+}
+.typing-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #8E8E93;
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+/* Input area */
+.chat-input-area {
+  padding: 8px 12px 28px;
+  border-top: 0.5px solid var(--ios-border);
+  background: white; flex-shrink: 0;
+}
+
+/* Mode A: free write */
+.free-write-wrap {
+  display: flex; align-items: flex-end; gap: 10px;
+}
+.free-write-input {
+  flex: 1; background: white; border: 1.5px solid var(--ios-border);
+  border-radius: 22px; padding: 10px 16px;
+  font-family: -apple-system, 'DM Sans', sans-serif; font-size: 0.95rem;
+  color: var(--ios-text); resize: none; max-height: 120px; min-height: 42px;
+  line-height: 1.4; transition: border-color 0.2s;
+}
+.free-write-input:focus { outline: none; border-color: var(--ios-blue); }
+.free-write-input::placeholder { color: var(--ios-secondary); }
+.free-write-input:disabled { background: var(--ios-bg); }
+.send-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--ios-blue); border: none;
+  color: white; font-size: 1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.15s;
+}
+.send-btn:disabled { background: var(--ios-border); cursor: not-allowed; }
+.send-btn:not(:disabled):active { transform: scale(0.9); }
+
+/* Mode B: choice mode */
+.choice-label { font-size: 0.75rem; font-weight: 600; color: var(--ios-secondary); margin-bottom: 8px; letter-spacing: 0.03em; text-transform: uppercase; }
+.choices-wrap { display: flex; flex-direction: column; gap: 7px; }
+.choice-btn {
+  background: white; border: 1.5px solid var(--ios-border);
+  border-radius: 14px; padding: 11px 14px;
+  font-family: -apple-system, 'DM Sans', sans-serif; font-size: 0.88rem;
+  color: var(--ios-text); text-align: left; cursor: pointer; transition: all 0.15s;
+  line-height: 1.4;
+}
+.choice-btn:not(:disabled):hover { border-color: var(--ios-blue); background: rgba(0,122,255,0.04); }
+.choice-btn:not(:disabled):active { transform: scale(0.98); }
+.choice-btn.correct { border-color: var(--ios-green); background: rgba(52,199,89,0.08); color: #1a7a35; }
+.choice-btn.wrong   { border-color: var(--ios-red);   background: rgba(255,59,48,0.07);  color: #c0392b; }
+.choice-btn:disabled { cursor: default; }
+
+/* Next btn */
+.next-row { padding: 10px 16px 0; }
+
+/* ── FEEDBACK / SPEEDOMETER panel ── */
+.feedback-sheet {
+  background: white; border-top: 0.5px solid var(--ios-border);
+  padding: 16px 16px 8px; flex-shrink: 0;
+  animation: sheetUp 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes sheetUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+.speedometer-wrap {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 14px;
+}
+
+/* Circular speedometer */
+.speedo {
+  position: relative; width: 90px; height: 90px; flex-shrink: 0;
+}
+.speedo svg { width: 100%; height: 100%; }
+.speedo-track { fill: none; stroke: #F2F2F7; stroke-width: 8; stroke-linecap: round; }
+.speedo-fill  {
+  fill: none; stroke-width: 8; stroke-linecap: round;
+  stroke-dasharray: 220; stroke-dashoffset: 220;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.34,1.56,0.64,1),
+              stroke 0.4s ease;
+  transform-origin: center; transform: rotate(-220deg);
+}
+/* Tick marks */
+.speedo-center {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%); text-align: center; pointer-events: none;
+}
+.speedo-pct { font-size: 1.3rem; font-weight: 700; line-height: 1; display: block; }
+.speedo-lbl { font-size: 0.55rem; color: var(--ios-secondary); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+
+/* Needle overlay */
+.speedo-needle-wrap {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+}
+.speedo-needle {
+  width: 2px; height: 32px; background: linear-gradient(to bottom, #333 60%, transparent);
+  border-radius: 2px; transform-origin: bottom center;
+  position: absolute; bottom: 50%;
+  transition: transform 1.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.fb-text-area { flex: 1; }
+.fb-score-title { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+.fb-mini-section { margin-bottom: 8px; }
+.fb-mini-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+.fb-mini-text  { font-size: 0.83rem; line-height: 1.55; color: #333; }
+
+.example-pill {
+  background: #F2F2F7; border-radius: 12px; padding: 10px 13px;
+  font-size: 0.83rem; line-height: 1.55; color: var(--ios-text);
+  border-left: 3px solid var(--ios-green); margin-top: 6px;
+  font-style: italic;
+}
+
+/* Emotion breakdown */
+.emotion-breakdown {
+  background: #F2F2F7; border-radius: 12px; padding: 12px 14px; margin-top: 8px;
+}
+.eb-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ios-secondary); margin-bottom: 8px; }
+.eb-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.eb-row:last-child { margin-bottom: 0; }
+.eb-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.eb-label { font-size: 0.8rem; flex: 1; }
+.eb-covered { font-size: 0.72rem; font-weight: 700; }
+
+/* ── RESULTS ── */
+#screen-results { background: var(--ios-bg); }
+.results-header {
+  background: white; padding: 52px 20px 24px; text-align: center;
+  border-bottom: 1px solid var(--ios-border);
+}
+
+/* Big speedometer on results */
+.big-speedo {
+  position: relative; width: 200px; height: 200px; margin: 0 auto 20px;
+}
+.big-speedo svg { width: 100%; height: 100%; }
+.bs-track { fill: none; stroke: #F2F2F7; stroke-width: 14; stroke-linecap: round; }
+.bs-zones { fill: none; stroke-width: 14; stroke-linecap: round; }
+.bs-fill {
+  fill: none; stroke-width: 14; stroke-linecap: round;
+  stroke-dasharray: 440; stroke-dashoffset: 440;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.34,1.56,0.64,1);
+  transform-origin: center; transform: rotate(-220deg);
+}
+.bs-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+.bs-pct { font-size: 3rem; font-weight: 700; line-height: 1; display: block; letter-spacing:-0.03em; }
+.bs-lbl { font-size: 0.72rem; color: var(--ios-secondary); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Tick marks for big speedo */
+.bs-ticks { position: absolute; inset: 0; }
+
+.results-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; }
+.results-sub   { color: var(--ios-secondary); font-size: 0.9rem; line-height: 1.6; max-width: 320px; margin: 0 auto; }
+
+.result-stat-row {
+  display: flex; gap: 0; background: white; margin: 16px 16px 0;
+  border-radius: var(--r); overflow: hidden; border: 1px solid var(--ios-border);
+}
+.rs { flex: 1; padding: 14px 10px; text-align: center; }
+.rs:not(:last-child) { border-right: 1px solid var(--ios-border); }
+.rs-val { font-size: 1.6rem; font-weight: 700; display: block; }
+.rs-lbl { font-size: 0.68rem; color: var(--ios-secondary); font-weight: 500; margin-top: 2px; }
+
+.review-section { padding: 16px 16px 0; }
+.review-section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ios-secondary); margin-bottom: 10px; }
+.review-cards { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.review-card {
+  background: white; border-radius: var(--r);
+  border: 1px solid var(--ios-border); overflow: hidden;
+}
+.review-card-header {
+  display: flex; align-items: center; gap: 10px; padding: 13px 16px;
+  cursor: pointer; user-select: none;
+}
+.rc-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.rc-snippet { font-size: 0.84rem; color: #333; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rc-score { font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+.rc-chev { font-size: 0.75rem; color: var(--ios-secondary); transition: transform 0.2s; flex-shrink: 0; }
+.review-card-body { display: none; padding: 0 16px 14px; border-top: 0.5px solid var(--ios-border); }
+.review-card-body.open { display: block; }
+.rv-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ios-secondary); margin: 10px 0 4px; }
+.rv-answer { font-size: 0.86rem; line-height: 1.55; background: var(--ios-bg); border-radius: 10px; padding: 9px 12px; }
+.rv-text { font-size: 0.83rem; line-height: 1.6; color: #333; }
+
+.results-btns { padding: 0 16px 40px; margin-top: 16px; }
+
+/* ── API KEY ── */
+#screen-apikey {
+  background: var(--ios-bg); padding: 0;
+}
+.key-hero { background: white; padding: 60px 24px 28px; text-align: center; border-bottom: 1px solid var(--ios-border); }
+.key-hero-icon { font-size: 56px; display: block; margin-bottom: 16px; }
+.key-hero h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 8px; }
+.key-hero p  { color: var(--ios-secondary); font-size: 0.9rem; line-height: 1.6; }
+.key-form { padding: 20px 16px; }
+.key-input-wrap { position: relative; margin-bottom: 8px; }
+input.key-input {
+  width: 100%; padding: 14px 46px 14px 16px;
+  background: white; border: 1.5px solid var(--ios-border);
+  border-radius: 14px; color: var(--ios-text);
+  font-family: -apple-system, 'DM Sans', sans-serif; font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+input.key-input:focus { outline: none; border-color: var(--ios-blue); }
+.eye-btn { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--ios-secondary); }
+.key-error { color: var(--ios-red); font-size: 0.82rem; margin-bottom: 8px; display: none; }
+.key-info {
+  background: white; border-radius: 14px; padding: 14px 16px;
+  border: 1px solid var(--ios-border); margin-bottom: 16px;
+}
+.key-info p { font-size: 0.82rem; color: var(--ios-secondary); line-height: 1.8; }
+
+/* Loading */
+.loading-overlay {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; flex: 1; gap: 14px;
+  padding: 40px 20px;
+}
+.spinner { width: 32px; height: 32px; border: 3px solid #E9E9EB; border-top-color: var(--ios-blue); border-radius: 50%; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { color: var(--ios-secondary); font-size: 0.9rem; }
+
+/* Error */
+.error-card {
+  background: rgba(255,59,48,0.06); border: 1px solid rgba(255,59,48,0.2);
+  border-radius: 14px; padding: 16px; margin: 12px 16px;
+}
+.error-card strong { color: var(--ios-red); display: block; margin-bottom: 4px; font-size: 0.9rem; }
+.error-card p { font-size: 0.82rem; color: var(--ios-secondary); line-height: 1.55; }
+</style>
+</head>
+<body>
+
+<!-- ══════ API KEY ══════ -->
+<div id="screen-apikey" class="screen">
+  <div class="key-hero">
+    <span class="key-hero-icon">🔑</span>
+    <h1>Kom i gang</h1>
+    <p>Lim inn din Anthropic API-nøkkel. Den lagres kun lokalt i nettleseren din.</p>
+  </div>
+  <div class="key-form">
+    <div class="key-input-wrap">
+      <input type="password" id="apikey-input" class="key-input" placeholder="sk-ant-api03-…" oninput="clearKeyErr()">
+      <button class="eye-btn" onclick="toggleEye()">👁</button>
+    </div>
+    <p class="key-error" id="key-error">Ugyldig nøkkel — skal starte med sk-ant-</p>
+    <div class="key-info">
+      <p>🔒 Lagres kun i nettleseren, aldri delt<br>
+         💰 Ca. $0.002 per runde<br>
+         🔑 Hent nøkkel: <span style="color:var(--ios-blue)">console.anthropic.com → API Keys</span></p>
+    </div>
+    <button class="btn btn-blue" onclick="saveKey()">Lagre og start</button>
+  </div>
+</div>
+
+<!-- ══════ HOME ══════ -->
+<div id="screen-home" class="screen">
+  <div class="home-hero">
+    <span class="home-emoji">💛</span>
+    <h1 class="home-title">EmpatiTrening</h1>
+    <p class="home-sub">Øv på å svare med varme og nærhet.<br>AI gir deg tilbakemelding etter hvert svar.</p>
+  </div>
+  <div class="home-stats">
+    <div class="hstat"><span class="hstat-val" id="h-streak">0</span><span class="hstat-lbl">🔥 Streak</span></div>
+    <div class="hstat"><span class="hstat-val" id="h-done">0</span><span class="hstat-lbl">Fullførte</span></div>
+    <div class="hstat"><span class="hstat-val" id="h-best">—</span><span class="hstat-lbl">⭐ Beste</span></div>
+  </div>
+  <div style="height:16px"></div>
+  <div class="mode-cards">
+    <div class="mode-card" onclick="setMode('free');goLevels()">
+      <span class="mode-icon">✍️</span>
+      <div class="mode-info">
+        <div class="mode-name">Skriv selv</div>
+        <div class="mode-desc">Formuler empatiske svar fritt. AI vurderer og gir tilbakemelding.</div>
+      </div>
+      <span class="mode-arrow">›</span>
+    </div>
+    <div class="mode-card" onclick="setMode('guided');goLevels()">
+      <span class="mode-icon">🧭</span>
+      <div class="mode-info">
+        <div class="mode-name">Veiledet modus</div>
+        <div class="mode-desc">Velg mellom svaralternativer. Se hva som er empatisk og hvorfor.</div>
+      </div>
+      <span class="mode-arrow">›</span>
+    </div>
+  </div>
+  <div style="padding:0 16px 8px">
+    <button class="btn btn-gray" style="font-size:0.82rem;opacity:0.7" onclick="showScreen('apikey')">🔑 Endre API-nøkkel</button>
+  </div>
+</div>
+
+<!-- ══════ LEVELS ══════ -->
+<div id="screen-levels" class="screen">
+  <div class="nav-bar">
+    <button class="nav-back" onclick="showScreen('home')">‹ Tilbake</button>
+    <span class="nav-title">Velg nivå</span>
+    <div class="nav-spacer"></div>
+  </div>
+  <div class="levels-list">
+    <div class="level-row" onclick="startQuiz('easy')">
+      <div class="level-dot" style="background:#34C759"></div>
+      <div class="level-text"><div class="lname">🌱 Nybegynner</div><div class="ldesc">Tydelige situasjoner — trøstbehovet er åpenbart</div></div>
+      <span class="level-badge lb-easy">Lett</span>
+    </div>
+    <div class="level-row" onclick="startQuiz('medium')">
+      <div class="level-dot" style="background:#FF9500"></div>
+      <div class="level-text"><div class="lname">🌿 Utfordring</div><div class="ldesc">Hverdagslige og litt mer nyanserte situasjoner</div></div>
+      <span class="level-badge lb-medium">Middels</span>
+    </div>
+    <div class="level-row" onclick="startQuiz('hard')">
+      <div class="level-dot" style="background:#FF3B30"></div>
+      <div class="level-text"><div class="lname">🔥 Avansert</div><div class="ldesc">Subtile signaler, skjulte følelser</div></div>
+      <span class="level-badge lb-hard">Vanskelig</span>
+    </div>
+    <div class="level-row" onclick="startQuiz('expert')">
+      <div class="level-dot" style="background:#007AFF"></div>
+      <div class="level-text"><div class="lname">⚡ Ekspert</div><div class="ldesc">Komplekse, flertydige situasjoner</div></div>
+      <span class="level-badge lb-expert">Ekspert</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ QUIZ (iMessage) ══════ -->
+<div id="screen-quiz" class="screen">
+
+  <!-- iMessage header -->
+  <div class="imsg-header">
+    <button class="imsg-back" onclick="showScreen('home')">‹</button>
+    <div class="imsg-avatar" id="q-avatar-letter">A</div>
+    <div class="imsg-contact">
+      <div class="imsg-contact-name" id="q-contact-name">Laster…</div>
+      <div class="imsg-contact-sub">iMessage</div>
+    </div>
+    <div class="imsg-progress-wrap">
+      <span class="imsg-qnum" id="q-counter">1/5</span>
+    </div>
+  </div>
+
+  <!-- Emotion breakdown tags -->
+  <div class="emotion-tags" id="emotion-tags"></div>
+
+  <!-- Loading -->
+  <div id="quiz-loading" class="loading-overlay">
+    <div class="spinner"></div>
+    <p class="loading-text">Genererer meldinger med AI…</p>
+  </div>
+
+  <!-- Chat content -->
+  <div id="quiz-content" style="display:contents">
+    <div class="chat-area" id="chat-area"></div>
+
+    <!-- Feedback sheet (hidden until answer submitted) -->
+    <div class="feedback-sheet" id="feedback-sheet" style="display:none">
+      <div class="speedometer-wrap">
+        <div class="speedo">
+          <svg viewBox="0 0 100 100">
+            <!-- colored zones -->
+            <circle class="speedo-track" cx="50" cy="50" r="35" stroke-dasharray="220" stroke-dashoffset="0" transform="rotate(-220 50 50)"/>
+            <circle class="speedo-fill" id="speedo-fill" cx="50" cy="50" r="35"/>
+          </svg>
+          <div class="speedo-center">
+            <span class="speedo-pct" id="speedo-pct">0%</span>
+            <span class="speedo-lbl">Empati</span>
+          </div>
+        </div>
+        <div class="fb-text-area">
+          <div class="fb-score-title" id="fb-score-title">—</div>
+          <div class="fb-mini-section" id="fb-worked-sec" style="display:none">
+            <div class="fb-mini-title" style="color:#34C759">✓ Fungerte</div>
+            <div class="fb-mini-text" id="fb-worked-text"></div>
+          </div>
+          <div class="fb-mini-section" id="fb-improve-sec" style="display:none">
+            <div class="fb-mini-title" style="color:#FF9500">↗ Voks her</div>
+            <div class="fb-mini-text" id="fb-improve-text"></div>
+          </div>
+        </div>
+      </div>
+      <div id="fb-example-sec" style="display:none">
+        <div class="fb-mini-title" style="color:#007AFF;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">💬 Slik kan det sies</div>
+        <div class="example-pill" id="fb-example-text"></div>
+      </div>
+      <div id="fb-emotions-sec" style="display:none;margin-top:10px">
+        <div class="emotion-breakdown">
+          <div class="eb-title">Følelsene i meldingen</div>
+          <div id="eb-rows"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input area -->
+    <div class="chat-input-area" id="chat-input-area">
+      <!-- Free write mode -->
+      <div id="free-write-mode">
+        <div class="free-write-wrap">
+          <textarea class="free-write-input" id="free-input" placeholder="iMessage" rows="1"
+            oninput="autoResize(this)"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitFree();}"></textarea>
+          <button class="send-btn" id="send-btn" onclick="submitFree()">↑</button>
+        </div>
+      </div>
+      <!-- Guided mode -->
+      <div id="guided-mode" style="display:none">
+        <div class="choice-label">Velg svar</div>
+        <div class="choices-wrap" id="choices-wrap"></div>
+      </div>
+    </div>
+
+    <div class="next-row" id="next-row" style="display:none">
+      <button class="btn btn-blue" id="next-btn" onclick="nextQ()" style="border-radius:14px;padding:14px">Neste →</button>
+    </div>
+
+    <div id="error-quiz"></div>
+  </div>
+</div>
+
+<!-- ══════ RESULTS ══════ -->
+<div id="screen-results" class="screen">
+  <div class="results-header">
+    <div class="big-speedo">
+      <!-- Tick marks via SVG -->
+      <svg viewBox="0 0 200 200">
+        <!-- Track -->
+        <circle class="bs-track" cx="100" cy="100" r="80" stroke-dasharray="440" stroke-dashoffset="0" transform="rotate(-220 100 100)"/>
+        <!-- Zone colors (red→yellow→green) -->
+        <circle cx="100" cy="100" r="80" fill="none" stroke="#FF3B30" stroke-width="14" stroke-linecap="round"
+          stroke-dasharray="66 374" stroke-dashoffset="0" transform="rotate(-220 100 100)"/>
+        <circle cx="100" cy="100" r="80" fill="none" stroke="#FF9500" stroke-width="14" stroke-linecap="round"
+          stroke-dasharray="66 374" stroke-dashoffset="-66" transform="rotate(-220 100 100)"/>
+        <circle cx="100" cy="100" r="80" fill="none" stroke="#34C759" stroke-width="14" stroke-linecap="round"
+          stroke-dasharray="110 330" stroke-dashoffset="-132" transform="rotate(-220 100 100)"/>
+        <!-- Fill overlay -->
+        <circle class="bs-fill" id="bs-fill" cx="100" cy="100" r="80"/>
+        <!-- Tick marks -->
+        <g id="tick-marks"></g>
+      </svg>
+      <div class="bs-center">
+        <span class="bs-pct" id="bs-pct">0%</span>
+        <span class="bs-lbl">Empati</span>
+      </div>
+    </div>
+    <h2 class="results-title" id="r-title"></h2>
+    <p class="results-sub" id="r-sub"></p>
+  </div>
+
+  <div class="result-stat-row">
+    <div class="rs"><span class="rs-val" id="r-avg" style="color:var(--ios-blue)">—</span><span class="rs-lbl">Snitt</span></div>
+    <div class="rs"><span class="rs-val" id="r-best-q" style="color:var(--ios-green)">—</span><span class="rs-lbl">Beste</span></div>
+    <div class="rs"><span class="rs-val" id="r-streak" style="color:#FF9500">0</span><span class="rs-lbl">🔥 Streak</span></div>
+  </div>
+
+  <div class="review-section">
+    <div class="review-section-title">Alle svarene dine</div>
+    <div class="review-cards" id="review-cards"></div>
+  </div>
+
+  <div class="results-btns">
+    <button class="btn btn-blue" onclick="goLevels()">Spill igjen</button>
+    <button class="btn btn-gray" onclick="showScreen('home')">Hjem</button>
+  </div>
+</div>
+
+<script>
+/* ── STATE ── */
+let questions=[], answers=[], feedbacks=[];
+let currentQ=0, answered=false, currentLevel='easy', currentMode='free';
+let totalDone=+localStorage.getItem('e_done')||0;
+let streak=+localStorage.getItem('e_streak')||0;
+let bestScore=localStorage.getItem('e_best')||null;
+const NAMES=['Sara','Magnus','Lena','Jonas','Emma','Kristian','Astrid','Håkon','Mia','Erlend','Ingrid','Tobias'];
+const AVATARBG=['#667eea','#f093fb','#4facfe','#43e97b','#fa709a','#a18cd1','#fda085','#84fab0'];
+
+/* ── API KEY ── */
+function getKey(){return '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';}
+function saveKey(){
+  const k=document.getElementById('apikey-input').value.trim();
+  if(!k.startsWith('sk-ant-')){document.getElementById('key-error').style.display='block';return;}
+  localStorage.setItem('e_key',k);showScreen('home');
+}
+function clearKeyErr(){document.getElementById('key-error').style.display='none';}
+function toggleEye(){const i=document.getElementById('apikey-input');i.type=i.type==='password'?'text':'password';}
+
+/* ── NAV ── */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  if(id==='home')updateHome();
+}
+function goLevels(){showScreen('levels');}
+function setMode(m){currentMode=m;}
+function updateHome(){
+  document.getElementById('h-streak').textContent=streak;
+  document.getElementById('h-done').textContent=totalDone;
+  document.getElementById('h-best').textContent=bestScore?bestScore+'%':'—';
+}
+function autoResize(ta){ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,120)+'px';}
+
+/* ── GENERATE QUESTIONS ── */
+async function generateQuestions(level){
+  const desc={
+    easy:'enkle og tydelige — trøstbehovet er åpenbart og sterkt',
+    medium:'hverdagslige og nyanserte — blandede følelser',
+    hard:'subtile — behovet for trøst skjuler seg bak ord',
+    expert:'komplekse og flertydige — vanskelig å lese hva de faktisk trenger'
+  }[level];
+
+  const prompt=`Lag 5 norske SMS/iMessage-scenarioer for empatitrenings-appen. Personen øver på å:
+- Se ALLE følelsene i en melding (ikke bare den åpenbare)
+- Svare med nærhet, ikke logikk eller egne historier
+- Finne riktig mengde å si (ikke for lite "huffda", ikke for mye)
+
+Nivå: ${desc}
+
+Returner KUN JSON, ingen markdown:
+{
+ "questions":[{
+   "sender_name":"norsk fornavn",
+   "scenario":"Meldingen personen sender (1-3 setninger, naturlig norsk SMS-stil)",
+   "context":"Hvem er dette og situasjonen (intern, ikke vis til bruker)",
+   "emotions":[
+     {"label":"følelsesnavn","color":"hex farge som #FF3B30","description":"kort beskrivelse av denne følelsen i meldingen"}
+   ],
+   "what_empathy_looks_like":"Hva et godt empatisk svar bør inneholde",
+   "choices":[
+     {"text":"Empatisk svar (best)","quality":"best","explanation":"Hvorfor dette er empatisk"},
+     {"text":"Delvis empatisk men mangler noe","quality":"partial","explanation":"Hva som er bra og hva som mangler"},
+     {"text":"Logisk/løsningsorientert svar","quality":"poor","explanation":"Hvorfor dette ikke er trøst"},
+     {"text":"Overfladisk svar (huffda-type)","quality":"surface","explanation":"Hvorfor dette ikke når frem"}
+   ]
+ }]
+}`;
+
+  const r=await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","x-api-key":getKey(),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+    body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:3500,messages:[{role:"user",content:prompt}]})
+  });
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const d=await r.json();
+  const txt=d.content.map(x=>x.text||'').join('').replace(/```json|```/g,'').trim();
+  return JSON.parse(txt).questions;
+}
+
+/* ── EVALUATE FREE ANSWER ── */
+async function evaluateAnswer(q,userAnswer){
+  const prompt=`Evaluer dette empatiske svaret. Personen sliter med: overfladige "huffda"-svar, egne historier, logikk/løsninger, ikke se ALLE følelsene i en melding.
+
+MELDING: "${q.scenario}"
+FØLELSENE I MELDINGEN: ${q.emotions.map(e=>e.label+': '+e.description).join('; ')}
+HVA EMPATI KREVER: ${q.what_empathy_looks_like}
+BRUKERENS SVAR: "${userAnswer}"
+
+Svar KUN JSON, ingen markdown:
+{
+ "score":0-100,
+ "worked":"hva som fungerte konkret (eller null)",
+ "improve":"hva som manglet og HVORFOR",
+ "example":"et naturlig empatisk svar, 1-3 setninger",
+ "emotions_covered":["følelsesnavn som ble anerkjent i svaret"]
+}`;
+
+  const r=await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","x-api-key":getKey(),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+    body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:600,messages:[{role:"user",content:prompt}]})
+  });
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const d=await r.json();
+  const txt=d.content.map(x=>x.text||'').join('').replace(/```json|```/g,'').trim();
+  return JSON.parse(txt);
+}
+
+/* ── START QUIZ ── */
+async function startQuiz(level){
+  currentLevel=level; currentQ=0; answered=false;
+  questions=[];answers=[];feedbacks=[];
+  showScreen('quiz');
+
+  document.getElementById('quiz-loading').style.display='flex';
+  document.getElementById('quiz-content').style.display='contents';
+  document.getElementById('chat-area').innerHTML='';
+  document.getElementById('feedback-sheet').style.display='none';
+  document.getElementById('next-row').style.display='none';
+  document.getElementById('error-quiz').innerHTML='';
+  document.getElementById('emotion-tags').innerHTML='';
+
+  // Show correct input mode
+  document.getElementById('free-write-mode').style.display=currentMode==='free'?'block':'none';
+  document.getElementById('guided-mode').style.display=currentMode==='guided'?'block':'none';
+  document.getElementById('free-input').value='';
+  document.getElementById('free-input').disabled=false;
+
+  try{
+    questions=await generateQuestions(level);
+    document.getElementById('quiz-loading').style.display='none';
+    renderQ();
+  }catch(e){
+    document.getElementById('quiz-loading').style.display='none';
+    document.getElementById('error-quiz').innerHTML=`
+      <div class="error-card"><strong>Kunne ikke laste</strong><p>Sjekk API-nøkkelen og kreditt.<br><small>${e.message}</small></p></div>
+      <div style="padding:0 16px"><button class="btn btn-gray" onclick="startQuiz('${level}')">Prøv igjen</button></div>`;
+  }
+}
+
+/* ── RENDER QUESTION ── */
+function renderQ(){
+  const q=questions[currentQ]; answered=false;
+  const chatArea=document.getElementById('chat-area');
+  chatArea.innerHTML='';
+
+  document.getElementById('q-counter').textContent=(currentQ+1)+'/'+questions.length;
+  document.getElementById('q-contact-name').textContent=q.sender_name||'Kontakt';
+
+  // Avatar letter & color
+  const av=document.getElementById('q-avatar-letter');
+  av.textContent=(q.sender_name||'A')[0].toUpperCase();
+  av.style.background=AVATARBG[currentQ%AVATARBG.length];
+
+  // Emotion tags
+  const tagsEl=document.getElementById('emotion-tags');
+  tagsEl.innerHTML='';
+  if(q.emotions){
+    const label=document.createElement('div');
+    label.style.cssText='font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ios-secondary);width:100%;margin-bottom:2px';
+    label.textContent='Følelsene å se etter:';
+    tagsEl.appendChild(label);
+    q.emotions.forEach(em=>{
+      const t=document.createElement('div');
+      t.className='emotion-tag';
+      t.style.cssText=`background:${em.color}18;border-color:${em.color}55;color:${em.color}`;
+      t.textContent=em.label;
+      t.title=em.description;
+      tagsEl.appendChild(t);
+    });
+  }
+
+  // Time stamp
+  const now=new Date();
+  addTime(chatArea, now.getHours()+':'+String(now.getMinutes()).padStart(2,'0'));
+
+  // Incoming message with typing effect
+  showTyping(chatArea).then(()=>{
+    addBubble(chatArea,'incoming',q.scenario,(q.sender_name||'A')[0].toUpperCase(),AVATARBG[currentQ%AVATARBG.length]);
+    chatArea.scrollTop=chatArea.scrollHeight;
+  });
+
+  // Reset
+  document.getElementById('feedback-sheet').style.display='none';
+  document.getElementById('next-row').style.display='none';
+  document.getElementById('free-input').value='';
+  document.getElementById('free-input').style.height='auto';
+  document.getElementById('free-input').disabled=false;
+  document.getElementById('send-btn').disabled=false;
+
+  if(currentMode==='guided') renderChoices(q);
+}
+
+function addTime(area, txt){
+  const d=document.createElement('div');
+  d.className='msg-time'; d.textContent=txt;
+  area.appendChild(d);
+}
+
+function addBubble(area, dir, text, letter, color){
+  const row=document.createElement('div');
+  row.className='msg-row '+dir;
+  if(dir==='incoming'){
+    const av=document.createElement('div');
+    av.className='msg-avatar-sm';
+    av.textContent=letter; av.style.background=color;
+    row.appendChild(av);
+  }
+  const b=document.createElement('div');
+  b.className='bubble-msg '+dir;
+  b.textContent=text;
+  row.appendChild(b);
+  area.appendChild(row);
+  return row;
+}
+
+function addBubbleStyled(area, text, cls){
+  const row=document.createElement('div');
+  row.className='msg-row outgoing';
+  const b=document.createElement('div');
+  b.className='bubble-msg outgoing '+cls;
+  b.textContent=text;
+  row.appendChild(b);
+  area.appendChild(row);
+}
+
+function showTyping(area){
+  return new Promise(resolve=>{
+    const row=document.createElement('div');
+    row.className='msg-row incoming'; row.id='typing-row';
+    row.innerHTML=`<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+    area.appendChild(row);
+    area.scrollTop=area.scrollHeight;
+    setTimeout(()=>{row.remove();resolve();},1000);
+  });
+}
+
+/* ── GUIDED CHOICES ── */
+function renderChoices(q){
+  const wrap=document.getElementById('choices-wrap');
+  // Shuffle choices
+  const shuffled=[...q.choices].sort(()=>Math.random()-0.5);
+  wrap.innerHTML='';
+  shuffled.forEach((c,i)=>{
+    const btn=document.createElement('button');
+    btn.className='choice-btn';
+    btn.textContent=c.text;
+    btn.onclick=()=>selectChoice(c,q,btn,wrap,shuffled);
+    wrap.appendChild(btn);
+  });
+}
+
+function selectChoice(choice,q,btn,wrap,all){
+  if(answered)return; answered=true;
+  const btns=wrap.querySelectorAll('.choice-btn');
+  btns.forEach(b=>b.disabled=true);
+
+  const scoreMap={best:92,partial:55,poor:20,surface:15};
+  const score=scoreMap[choice.quality]||50;
+
+  btn.classList.add(choice.quality==='best'?'correct':'wrong');
+  // Show the best answer in green
+  if(choice.quality!=='best'){
+    all.forEach((c,i)=>{if(c.quality==='best') btns[i].classList.add('correct');});
+  }
+
+  // Show user bubble
+  const chatArea=document.getElementById('chat-area');
+  addBubble(chatArea,'outgoing',choice.text,'','');
+
+  // Build feedback
+  const fb={
+    score,
+    worked: choice.quality==='best'||choice.quality==='partial' ? choice.explanation : null,
+    improve: choice.quality!=='best' ? choice.explanation : null,
+    example: q.choices.find(c=>c.quality==='best')?.text,
+    emotions_covered: choice.quality==='best' ? q.emotions.map(e=>e.label) : []
+  };
+  feedbacks.push(choice.text); // store answer text
+  answers.push(choice.text);
+  showFeedback(fb,q);
+
+  document.getElementById('next-row').style.display='block';
+  document.getElementById('next-btn').textContent=currentQ+1<questions.length?'Neste →':'Se resultater 🏁';
+  chatArea.scrollTop=chatArea.scrollHeight;
+}
+
+/* ── FREE WRITE SUBMIT ── */
+async function submitFree(){
+  if(answered)return;
+  const userText=document.getElementById('free-input').value.trim();
+  if(!userText)return;
+  answered=true;
+
+  const chatArea=document.getElementById('chat-area');
+  addBubble(chatArea,'outgoing',userText,'','');
+  chatArea.scrollTop=chatArea.scrollHeight;
+
+  document.getElementById('free-input').disabled=true;
+  document.getElementById('send-btn').disabled=true;
+
+  answers.push(userText);
+
+  // Show typing while evaluating
+  const typingRow=document.createElement('div');
+  typingRow.className='msg-row incoming'; typingRow.id='eval-typing';
+  typingRow.innerHTML=`<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  chatArea.appendChild(typingRow);
+  chatArea.scrollTop=chatArea.scrollHeight;
+
+  let fb;
+  try{ fb=await evaluateAnswer(questions[currentQ],userText); }
+  catch(e){ fb={score:50,worked:null,improve:'Klarte ikke evaluere nå.',example:null,emotions_covered:[]}; }
+
+  document.getElementById('eval-typing')?.remove();
+  feedbacks.push(fb);
+  showFeedback(fb, questions[currentQ]);
+
+  document.getElementById('next-row').style.display='block';
+  document.getElementById('next-btn').textContent=currentQ+1<questions.length?'Neste →':'Se resultater 🏁';
+  chatArea.scrollTop=chatArea.scrollHeight;
+}
+
+/* ── SHOW FEEDBACK ── */
+function showFeedback(fb, q){
+  const score=typeof fb==='object'?fb.score||0:0;
+  const sheet=document.getElementById('feedback-sheet');
+  sheet.style.display='block';
+
+  // Speedometer
+  const fill=document.getElementById('speedo-fill');
+  // Circle: r=35, circumference=220 (275deg arc)
+  let color=score>=76?'#34C759':score>=56?'#FF9500':score>=31?'#FF9500':'#FF3B30';
+  fill.style.stroke=color;
+  fill.setAttribute('transform','rotate(-220 50 50)');
+  fill.style.strokeDashoffset=220;
+  setTimeout(()=>{ fill.style.strokeDashoffset=220-(220*0.75*score/100); },80);
+
+  const pctEl=document.getElementById('speedo-pct');
+  pctEl.style.color=color;
+  animCount('speedo-pct',0,score,'%',900);
+
+  // Title
+  let title;
+  if(score>=85)title='🌟 Veldig empatisk!';
+  else if(score>=65)title='💛 Godt svar!';
+  else if(score>=45)title='🌱 På vei!';
+  else title='💡 Øv videre';
+  document.getElementById('fb-score-title').textContent=title;
+  document.getElementById('fb-score-title').style.color=color;
+
+  // Sections
+  if(fb.worked&&fb.worked!=='null'&&fb.worked!==null){
+    document.getElementById('fb-worked-text').textContent=fb.worked;
+    document.getElementById('fb-worked-sec').style.display='block';
+  }else{document.getElementById('fb-worked-sec').style.display='none';}
+
+  if(fb.improve){
+    document.getElementById('fb-improve-text').textContent=fb.improve;
+    document.getElementById('fb-improve-sec').style.display='block';
+  }else{document.getElementById('fb-improve-sec').style.display='none';}
+
+  if(fb.example){
+    document.getElementById('fb-example-text').textContent='"'+fb.example+'"';
+    document.getElementById('fb-example-sec').style.display='block';
+  }else{document.getElementById('fb-example-sec').style.display='none';}
+
+  // Emotion breakdown
+  if(q&&q.emotions&&q.emotions.length){
+    const covered=fb.emotions_covered||[];
+    const rows=document.getElementById('eb-rows');
+    rows.innerHTML='';
+    q.emotions.forEach(em=>{
+      const isCovered=covered.some(c=>c.toLowerCase().includes(em.label.toLowerCase())||em.label.toLowerCase().includes(c.toLowerCase()));
+      const row=document.createElement('div');
+      row.className='eb-row';
+      row.innerHTML=`<div class="eb-dot" style="background:${em.color}"></div>
+        <span class="eb-label" style="color:${em.color};font-weight:600">${em.label}</span>
+        <span class="eb-covered" style="color:${isCovered?'#34C759':'#FF3B30'}">${isCovered?'✓ Sett':'Savnet'}</span>`;
+      rows.appendChild(row);
+    });
+    document.getElementById('fb-emotions-sec').style.display='block';
+  }else{
+    document.getElementById('fb-emotions-sec').style.display='none';
+  }
+}
+
+function nextQ(){
+  currentQ++;
+  if(currentQ>=questions.length) showResults();
+  else {
+    const chatArea=document.getElementById('chat-area');
+    chatArea.innerHTML='';
+    document.getElementById('feedback-sheet').style.display='none';
+    document.getElementById('next-row').style.display='none';
+    document.getElementById('error-quiz').innerHTML='';
+    if(currentMode==='guided'){
+      document.getElementById('choices-wrap').innerHTML='';
+    }
+    renderQ();
+  }
+}
+
+/* ── RESULTS ── */
+function showResults(){
+  showScreen('results');
+  const rawFbs=feedbacks.map(f=>typeof f==='object'?f:{score:50});
+  const scores=rawFbs.map(f=>f.score||0);
+  const avg=Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+  const best=Math.max(...scores);
+
+  totalDone++;
+  if(!bestScore||avg>parseInt(bestScore))bestScore=avg;
+  if(avg>=60)streak++;else streak=0;
+  localStorage.setItem('e_done',totalDone);
+  localStorage.setItem('e_streak',streak);
+  localStorage.setItem('e_best',bestScore);
+
+  // Big speedometer
+  const bsFill=document.getElementById('bs-fill');
+  const color=avg>=76?'#34C759':avg>=56?'#FF9500':'#FF3B30';
+  bsFill.style.stroke=color;
+  bsFill.setAttribute('transform','rotate(-220 100 100)');
+  bsFill.style.strokeDashoffset=440;
+  setTimeout(()=>{bsFill.style.strokeDashoffset=440-(440*0.75*avg/100);animCount('bs-pct',0,avg,'%',1400);},150);
+  document.getElementById('bs-pct').style.color=color;
+
+  let t,s;
+  if(avg>=85){t='🌟 Empatimester!';s='Du var virkelig til stede og så følelsene. Det merker folk.';}
+  else if(avg>=65){t='💛 God fremgang!';s='Du er godt på vei. Øv videre på å se alle lagene i en melding.';}
+  else if(avg>=45){t='🌱 Godt forsøk!';s='Du ser behovet, men prøv å anerkjenne alle følelsene — ikke bare én.';}
+  else{t='💪 Hold ut!';s='Les eksemplene nøye — de viser akkurat hva som gjør et svar empatisk.';}
+
+  document.getElementById('r-title').textContent=t;
+  document.getElementById('r-sub').textContent=s;
+  document.getElementById('r-avg').textContent=avg+'%';
+  document.getElementById('r-best-q').textContent=best+'%';
+  document.getElementById('r-streak').textContent=streak;
+
+  const cards=document.getElementById('review-cards');
+  cards.innerHTML='';
+  questions.forEach((q,i)=>{
+    const fb=rawFbs[i]||{};
+    const score=fb.score||0;
+    const ans=answers[i]||'(ingen svar)';
+    const dotColor=score>=76?'#34C759':score>=56?'#FF9500':'#FF3B30';
+    const badgeBg=score>=76?'rgba(52,199,89,0.1)':score>=56?'rgba(255,149,0,0.1)':'rgba(255,59,48,0.1)';
+    const short=q.sender_name+(': ')+(q.scenario.length>40?q.scenario.slice(0,37)+'…':q.scenario);
+    const worked=fb.worked&&fb.worked!=='null'?`<div class="rv-label" style="color:#34C759">✓ Fungerte</div><div class="rv-text">${fb.worked}</div>`:'';
+    const improve=fb.improve?`<div class="rv-label" style="color:#FF9500">↗ Voks her</div><div class="rv-text">${fb.improve}</div>`:'';
+    const example=fb.example?`<div class="rv-label" style="color:#007AFF">💬 Eksempel</div><div class="rv-answer" style="font-style:italic">"${fb.example}"</div>`:'';
+    const emotionRows=q.emotions?q.emotions.map(em=>{
+      const covered=(fb.emotions_covered||[]).some(c=>c.toLowerCase().includes(em.label.toLowerCase())||em.label.toLowerCase().includes(c.toLowerCase()));
+      return `<span style="font-size:.75rem;background:${em.color}18;color:${em.color};border:1.5px solid ${em.color}44;border-radius:99px;padding:2px 8px;margin-right:4px">${em.label} ${covered?'✓':'✗'}</span>`;
+    }).join(''):'';
+
+    cards.innerHTML+=`
+      <div class="review-card">
+        <div class="review-card-header" onclick="toggleReview(${i})">
+          <div class="rc-dot" style="background:${dotColor}"></div>
+          <span class="rc-snippet">${short}</span>
+          <span class="rc-score" style="background:${badgeBg};color:${dotColor}">${score}%</span>
+          <span class="rc-chev" id="rchev-${i}">▼</span>
+        </div>
+        <div class="review-card-body" id="rcb-${i}">
+          <div class="rv-label">Ditt svar</div>
+          <div class="rv-answer">${ans}</div>
+          ${emotionRows?`<div style="margin-top:8px">${emotionRows}</div>`:''}
+          ${worked}${improve}${example}
+        </div>
+      </div>`;
+  });
+}
+
+function toggleReview(i){
+  const b=document.getElementById('rcb-'+i);
+  const c=document.getElementById('rchev-'+i);
+  const o=b.classList.toggle('open');
+  c.style.transform=o?'rotate(180deg)':'';
+}
+
+function animCount(id,from,to,suf,dur){
+  const el=document.getElementById(id),steps=40,inc=(to-from)/steps;
+  let cur=from,s=0;
+  const t=setInterval(()=>{s++;cur+=inc;el.textContent=Math.round(cur)+suf;if(s>=steps){el.textContent=to+suf;clearInterval(t);}},dur/steps);
+}
+
+/* ── INIT ── */
+updateHome();
+if(getKey())showScreen('home');
+else showScreen('apikey');
+</script>
+</body>
+</html>
